@@ -15,7 +15,7 @@ router.get("/getAllPosts/", async (req, res) => {
     res.send(posts);
 });
 
-router.get("/addPost/", async (req, res) => {
+router.post("/addPost/", async (req, res) => {
     console.log("Here");
     const { post, email, tags } = req.body;
 
