@@ -169,22 +169,22 @@ router.get("/getAllTags/", async (req, res) => {
     const querySnapshot = await getDocs(collection(db, "tags"));
     querySnapshot.forEach((doc) => {
         doc.data().posts.forEach((post) => {
-            tags.push(post);
+            tags.push({post: post, tag:doc.id});
         });
     });
 
     const finalTags = [];
     for (let i = 0; i < tags.length; i++) {
-        const postRef = doc(db, "posts", `${tags[i]}`);
+        const postRef = doc(db, "posts", `${tags[i].post}`);
         const postSnap = await getDoc(postRef);
         if(postSnap.exists()) {
-            finalTags.push({id:tags[i], type:'post'});
+            finalTags.push({id:tags[i].post, type:'post', tag: tags[i].tag});
         }
 
-        const packageRef = doc(db, "packages", `${tags[i]}`);
+        const packageRef = doc(db, "packages", `${tags[i].post}`);
         const packageSnap = await getDoc(packageRef);
         if(packageSnap.exists()) {
-            finalTags.push({id:tags[i], type:'package'});
+            finalTags.push({id:tags[i].post, type:'package', tag: tags[i].tag});
         }
     }
 
