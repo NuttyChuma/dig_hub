@@ -36,7 +36,6 @@ router.post("/addPackage/", async (req, res) => {
         packagesId: uuid,
         username: username,
         email: email,
-
     }).then(() => {
         res.send({ 'added': true });
     });
