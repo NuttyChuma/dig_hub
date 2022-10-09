@@ -1,5 +1,6 @@
 import express from "express";
 import { db } from "../../firebase-config.js";
+import { v4 as uuidv4 } from 'uuid';
 import { getDoc, collection, updateDoc, doc, addDoc, arrayUnion, arrayRemove, setDoc, deleteDoc, getDocs } from "firebase/firestore";
 
 const router = express.Router();
@@ -7,7 +8,9 @@ const router = express.Router();
 router.post("/addPackage/", async (req, res) => {
     const { mineName, nearestTown, status, coordinateX, coordinateY, 
         elavation, waterQuality, airQuality, production, boreHoles } = req.body;
-    await setDoc(doc(db, "users", `${email}`), {
+    
+    const uuid = uuidv4().toString();
+    await setDoc(doc(db, "packages", `${uuid}`), {
         mineName: mineName,
         nearestTown: nearestTown,
         status: status,
@@ -18,6 +21,7 @@ router.post("/addPackage/", async (req, res) => {
         airQuality: airQuality,
         production: production,
         elavation: elavation,
+        packagesId: uuid,
     }).then(() => {
         res.send({ 'added': true });
     });

@@ -82,28 +82,32 @@ router.post("/addReply/", async (req, res) => {
     });
 });
 
-router.post("/like/", async (req, res) => {
+router.get("/like/", async (req, res) => {
     const {likerId, postId} = req.body;
-    // const likerId = "";
-    // const postId = "f90891bb-11e0-4ffc-b3c6-49a7f4ee347f";
+    // const likerId = uuidv4().toString();
+    // const postId = "19db0454-e99e-4d36-acd4-d248f10df327";
     const postsSnapshot = await getDocs(collection(db, "posts"));
     const postRef = doc(db, "posts", `${postId}`);
     var isPostLiked = false;
     var isPostIn = false;
     postsSnapshot.forEach(async (doc) => {
         if (doc.data().postId === postId) {
-            for (const like of doc.data().likes) {
-                isPostIn = true;
-                console.log(like);
-                if (like === likerId) {
-                    console.log("Here");
-                    isPostLiked = true;
-                    await updateDoc(postRef, {
-                        likes: arrayRemove(likerId)
-                    });
-                    break;
+            if (doc.data().likes !== undefined) {
+                for (const like of doc.data().likes) {
+                    isPostIn = true;
+                    console.log(like);
+                    if (like === likerId) {
+                        console.log("Here");
+                        isPostLiked = true;
+                        await updateDoc(postRef, {
+                            likes: arrayRemove(likerId)
+                        });
+                        break;
+                    }
                 }
             }
+        }else{
+            isPostIn = true;
         }
     });
 
