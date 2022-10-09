@@ -68,7 +68,7 @@ router.post("/getPostReplies/", async (req, res) => {
 
 router.post("/addReply/", async (req, res) => {
     console.log("Here");
-    const { reply, email, postId } = req.body;
+    const { reply, email, postId,username } = req.body;
     const uuid = uuidv4().toString();
     const dateTime = new Date().toLocaleString().toString();
     await setDoc(doc(db, "posts", `${uuid}`), {
@@ -77,12 +77,13 @@ router.post("/addReply/", async (req, res) => {
         postId: uuid,
         reply: postId,
         time: dateTime,
+        username
     }).then(() => {
         res.send({ 'added': true });
     });
 });
 
-router.get("/like/", async (req, res) => {
+router.post("/like/", async (req, res) => {
     const {likerId, postId} = req.body;
     // const likerId = uuidv4().toString();
     // const postId = "19db0454-e99e-4d36-acd4-d248f10df327";
