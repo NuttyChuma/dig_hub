@@ -83,15 +83,15 @@ router.post("/addReply/", async (req, res) => {
 });
 
 router.post("/like/", async (req, res) => {
-    const {likerId, email} = req.body;
+    const {likerId, postId} = req.body;
     // const likerId = "";
     // const postId = "f90891bb-11e0-4ffc-b3c6-49a7f4ee347f";
     const postsSnapshot = await getDocs(collection(db, "posts"));
-    const postRef = doc(db, "posts", `${email}`);
+    const postRef = doc(db, "posts", `${postId}`);
     var isPostLiked = false;
     var isPostIn = false;
     postsSnapshot.forEach(async (doc) => {
-        if (doc.data().email === email) {
+        if (doc.data().postId === postId) {
             for (const like of doc.data().likes) {
                 isPostIn = true;
                 console.log(like);
@@ -114,11 +114,11 @@ router.post("/like/", async (req, res) => {
     }
 
     const repliesSnapshot = await getDocs(collection(db, "replies"));
-    const replyRef = doc(db, "replies", `${email}`);
+    const replyRef = doc(db, "replies", `${postId}`);
     var isReplyLiked = false;
     var isReplyIn = false;
     repliesSnapshot.forEach(async (doc) => {
-        if (doc.data().email === email) {
+        if (doc.data().postId === postId) {
             for (const like in doc.data().likes) {
                 isReplyIn = true;
                 if (like === likerId) {
