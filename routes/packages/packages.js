@@ -5,10 +5,20 @@ import { getDoc, collection, updateDoc, doc, addDoc, arrayUnion, arrayRemove, se
 
 const router = express.Router();
 
+router.get("/getPackages/", async (req, res) => {
+
+    const packages = [];
+    const querySnapshot = await getDocs(collection(db, "packages"));
+    querySnapshot.forEach((doc) => {
+        packages.push(doc.data());
+    });
+    res.send(packages);
+});
+
 router.post("/addPackage/", async (req, res) => {
-    const { mineName, nearestTown, status, coordinateX, coordinateY, 
+    const { mineName, nearestTown, status, coordinateX, coordinateY,
         elavation, waterQuality, airQuality, production, boreHoles } = req.body;
-    
+
     const uuid = uuidv4().toString();
     await setDoc(doc(db, "packages", `${uuid}`), {
         mineName: mineName,
@@ -21,6 +31,7 @@ router.post("/addPackage/", async (req, res) => {
         airQuality: airQuality,
         production: production,
         elavation: elavation,
+        boreHoles: boreHoles,
         packagesId: uuid,
     }).then(() => {
         res.send({ 'added': true });
