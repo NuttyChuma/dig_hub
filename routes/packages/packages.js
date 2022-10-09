@@ -16,11 +16,13 @@ router.get("/getPackages/", async (req, res) => {
 });
 
 router.post("/addPackage/", async (req, res) => {
-    const { mineName, nearestTown, status, coordinateX, coordinateY,
-        elavation, waterQuality, airQuality, production, boreHoles } = req.body;
+    const {title, likes, mineName, nearestTown, status, coordinateX, coordinateY,
+        elavation, waterQuality, airQuality, production, boreHoles, username, email } = req.body;
 
     const uuid = uuidv4().toString();
     await setDoc(doc(db, "packages", `${uuid}`), {
+        title: title,
+        likes: likes,
         mineName: mineName,
         nearestTown: nearestTown,
         status: status,
@@ -30,9 +32,10 @@ router.post("/addPackage/", async (req, res) => {
         waterQuality: waterQuality,
         airQuality: airQuality,
         production: production,
-        elavation: elavation,
         boreHoles: boreHoles,
         packagesId: uuid,
+        username: username,
+        email: email,
     }).then(() => {
         res.send({ 'added': true });
     });

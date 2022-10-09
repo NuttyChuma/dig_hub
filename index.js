@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import posts from "./routes/posts/posts.js";
 import users from "./routes/users/users.js";
+import packages from "./routes/packages/packages.js";
 
 const app = express();
 
@@ -18,6 +19,8 @@ app.use(cors());
 app.use("/posts", posts);
 
 app.use("/users", users);
+
+app.use("/packages", packages);
 
 
 app.listen(PORT, () => {

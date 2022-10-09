@@ -148,10 +148,9 @@ router.get("/like/", async (req, res) => {
     res.send({ 'success': true });
 });
 
-router.get("/getPostsWithTag/", async (req, res) => {
-    const replies = [];
-    // const tag = req.body.tag;
-    const tag = "#FirstPost";
+router.post("/getPostsWithTag/", async (req, res) => {
+    const tag = req.body.tag;
+    // const tag = "#FirstPost";
     const tagRef = doc(db, "tags", `${tag}`);
     const docSnap = await getDoc(tagRef);
 
@@ -166,6 +165,33 @@ router.get("/getPostsWithTag/", async (req, res) => {
     }
 
     res.send(posts);
+});
+
+router.get("/getAllTags/", async (req, res) => {
+    const tags = [];
+    const querySnapshot = await getDocs(collection(db, "tags"));
+    querySnapshot.forEach((doc) => {
+        doc.data().posts.forEach((post) => {
+            tags.push({post: post, tag:doc.id});
+        });
+    });
+
+    const finalTags = [];
+    for (let i = 0; i < tags.length; i++) {
+        const postRef = doc(db, "posts", `${tags[i].post}`);
+        const postSnap = await getDoc(postRef);
+        if(postSnap.exists()) {
+            finalTags.push({id:tags[i].post, type:'post', tag: tags[i].tag});
+        }
+
+        const packageRef = doc(db, "packages", `${tags[i].post}`);
+        const packageSnap = await getDoc(packageRef);
+        if(packageSnap.exists()) {
+            finalTags.push({id:tags[i].post, type:'package', tag: tags[i].tag});
+        }
+    }
+
+    res.send(finalTags);
 });
 
 export default router;
