@@ -71,7 +71,7 @@ router.post("/addReply/", async (req, res) => {
     const { reply, email, postId } = req.body;
     const uuid = uuidv4().toString();
     const dateTime = new Date().toLocaleString().toString();
-    await setDoc(doc(db, "posts", `${uuid}`), {
+    await setDoc(doc(db, "replies", `${uuid}`), {
         message: reply,
         email: email,
         postId: uuid,
