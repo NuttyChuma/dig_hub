@@ -85,7 +85,7 @@ router.post("/addReply/", async (req, res) => {
     });
 });
 
-router.get("/like/", async (req, res) => {
+router.post("/like/", async (req, res) => {
     const { likerId, postId } = req.body;
     // const likerId = uuidv4().toString();
     // const postId = "19db0454-e99e-4d36-acd4-d248f10df327";
